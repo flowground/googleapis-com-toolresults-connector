@@ -1,0 +1,40 @@
+{
+    "type": "object",
+    "properties": {
+        "executionId": {
+            "required": true,
+            "type": "string"
+        },
+        "filter": {
+            "type": "array",
+            "items": {
+                "enum": [
+                    "cpu",
+                    "graphics",
+                    "memory",
+                    "network",
+                    "perfMetricTypeUnspecified"
+                ],
+                "type": "string"
+            }
+        },
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "stepId": {
+            "required": true,
+            "type": "string"
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        }
+    }
+}

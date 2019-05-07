@@ -1,0 +1,31 @@
+{
+    "type": "object",
+    "properties": {
+        "executionId": {
+            "required": true,
+            "type": "string"
+        },
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "stepId": {
+            "required": true,
+            "type": "string"
+        },
+        "prettyPrint": {
+            "type": "boolean",
+            "default": true
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        }
+    }
+}

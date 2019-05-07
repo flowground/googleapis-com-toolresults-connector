@@ -1,0 +1,274 @@
+{
+    "type": "object",
+    "properties": {
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestId": {
+            "type": "string"
+        },
+        "oauth_token": {
+            "type": "string"
+        },
+        "prettyPrint": {
+            "type": "boolean",
+            "default": true
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "An Execution represents a collection of Steps. For instance, it could represent: - a mobile test executed across a range of device configurations - a jenkins job with a build step followed by a test step\n\nThe maximum size of an execution message is 1 MiB.\n\nAn Execution can be updated until its state is set to COMPLETE at which point it becomes immutable.",
+            "properties": {
+                "completionTime": {
+                    "description": "The time when the Execution status transitioned to COMPLETE.\n\nThis value will be set automatically when state transitions to COMPLETE.\n\n- In response: set if the execution state is COMPLETE. - In create/update request: never set",
+                    "properties": {
+                        "nanos": {
+                            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "creationTime": {
+                    "description": "The time when the Execution was created.\n\nThis value will be set automatically when CreateExecution is called.\n\n- In response: always set - In create/update request: never set",
+                    "properties": {
+                        "nanos": {
+                            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "executionId": {
+                    "description": "A unique identifier within a History for this Execution.\n\nReturns INVALID_ARGUMENT if this field is set or overwritten by the caller.\n\n- In response always set - In create/update request: never set",
+                    "type": "string"
+                },
+                "outcome": {
+                    "description": "Classify the result, for example into SUCCESS or FAILURE\n\n- In response: present if set by create/update request - In create/update request: optional",
+                    "properties": {
+                        "failureDetail": {
+                            "description": "More information about a FAILURE outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not FAILURE.\n\nOptional",
+                            "properties": {
+                                "crashed": {
+                                    "description": "If the failure was severe because the system (app) under test crashed.",
+                                    "type": "boolean"
+                                },
+                                "notInstalled": {
+                                    "description": "If an app is not installed and thus no test can be run with the app. This might be caused by trying to run a test on an unsupported platform.",
+                                    "type": "boolean"
+                                },
+                                "otherNativeCrash": {
+                                    "description": "If a native process (including any other than the app) crashed.",
+                                    "type": "boolean"
+                                },
+                                "timedOut": {
+                                    "description": "If the test overran some time limit, and that is why it failed.",
+                                    "type": "boolean"
+                                },
+                                "unableToCrawl": {
+                                    "description": "If the robo was unable to crawl the app; perhaps because the app did not start.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "inconclusiveDetail": {
+                            "description": "More information about an INCONCLUSIVE outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not INCONCLUSIVE.\n\nOptional",
+                            "properties": {
+                                "abortedByUser": {
+                                    "description": "If the end user aborted the test execution before a pass or fail could be determined. For example, the user pressed ctrl-c which sent a kill signal to the test runner while the test was running.",
+                                    "type": "boolean"
+                                },
+                                "infrastructureFailure": {
+                                    "description": "If the test runner could not determine success or failure because the test depends on a component other than the system under test which failed.\n\nFor example, a mobile test requires provisioning a device where the test executes, and that provisioning can fail.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "skippedDetail": {
+                            "description": "More information about a SKIPPED outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not SKIPPED.\n\nOptional",
+                            "properties": {
+                                "incompatibleAppVersion": {
+                                    "description": "If the App doesn't support the specific API level.",
+                                    "type": "boolean"
+                                },
+                                "incompatibleArchitecture": {
+                                    "description": "If the App doesn't run on the specific architecture, for example, x86.",
+                                    "type": "boolean"
+                                },
+                                "incompatibleDevice": {
+                                    "description": "If the requested OS version doesn't run on the specific device model.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "successDetail": {
+                            "description": "More information about a SUCCESS outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not SUCCESS.\n\nOptional",
+                            "properties": {
+                                "otherNativeCrash": {
+                                    "description": "If a native process other than the app crashed.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "summary": {
+                            "description": "The simplest way to interpret a result.\n\nRequired",
+                            "enum": [
+                                "failure",
+                                "flaky",
+                                "inconclusive",
+                                "skipped",
+                                "success",
+                                "unset"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "specification": {
+                    "description": "Lightweight information about execution request.\n\n- In response: present if set by create - In create: optional - In update: optional",
+                    "properties": {
+                        "androidTest": {
+                            "description": "An Android mobile test execution specification.",
+                            "properties": {
+                                "androidAppInfo": {
+                                    "description": "Information about the application under test.",
+                                    "properties": {
+                                        "name": {
+                                            "description": "The name of the app. Optional",
+                                            "type": "string"
+                                        },
+                                        "packageName": {
+                                            "description": "The package name of the app. Required.",
+                                            "type": "string"
+                                        },
+                                        "versionCode": {
+                                            "description": "The internal version code of the app. Optional.",
+                                            "type": "string"
+                                        },
+                                        "versionName": {
+                                            "description": "The version name of the app. Optional.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "androidInstrumentationTest": {
+                                    "description": "An Android instrumentation test.",
+                                    "properties": {
+                                        "testPackageId": {
+                                            "description": "The java package for the test to be executed. Required",
+                                            "type": "string"
+                                        },
+                                        "testRunnerClass": {
+                                            "description": "The InstrumentationTestRunner class. Required",
+                                            "type": "string"
+                                        },
+                                        "testTargets": {
+                                            "description": "Each target must be fully qualified with the package name or class name, in one of these formats: - \"package package_name\" - \"class package_name.class_name\" - \"class package_name.class_name#method_name\"\n\nIf empty, all targets in the module will be run.",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "type": "array"
+                                        },
+                                        "useOrchestrator": {
+                                            "description": "The flag indicates whether Android Test Orchestrator will be used to run test or not.",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "androidRoboTest": {
+                                    "description": "An Android robo test.",
+                                    "properties": {
+                                        "appInitialActivity": {
+                                            "description": "The initial activity that should be used to start the app. Optional",
+                                            "type": "string"
+                                        },
+                                        "bootstrapPackageId": {
+                                            "description": "The java package for the bootstrap. Optional",
+                                            "type": "string"
+                                        },
+                                        "bootstrapRunnerClass": {
+                                            "description": "The runner class for the bootstrap. Optional",
+                                            "type": "string"
+                                        },
+                                        "maxDepth": {
+                                            "description": "The max depth of the traversal stack Robo can explore. Optional",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        },
+                                        "maxSteps": {
+                                            "description": "The max number of steps/actions Robo can execute. Default is no limit (0). Optional",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "testTimeout": {
+                                    "description": "Max time a test is allowed to run before it is automatically cancelled.",
+                                    "properties": {
+                                        "nanos": {
+                                            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        },
+                                        "seconds": {
+                                            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                                            "format": "int64",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "state": {
+                    "description": "The initial state is IN_PROGRESS.\n\nThe only legal state transitions is from IN_PROGRESS to COMPLETE.\n\nA PRECONDITION_FAILED will be returned if an invalid transition is requested.\n\nThe state can only be set to COMPLETE once. A FAILED_PRECONDITION will be returned if the state is set to COMPLETE multiple times.\n\nIf the state is set to COMPLETE, all the in-progress steps within the execution will be set as COMPLETE. If the outcome of the step is not set, the outcome will be set to INCONCLUSIVE.\n\n- In response always set - In create/update request: optional",
+                    "enum": [
+                        "complete",
+                        "inProgress",
+                        "pending",
+                        "unknownState"
+                    ],
+                    "type": "string"
+                },
+                "testExecutionMatrixId": {
+                    "description": "TestExecution Matrix ID that the TestExecutionService uses.\n\n- In response: present if set by create - In create: optional - In update: never set",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

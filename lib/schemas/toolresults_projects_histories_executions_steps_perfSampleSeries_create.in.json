@@ -1,0 +1,102 @@
+{
+    "type": "object",
+    "properties": {
+        "executionId": {
+            "required": true,
+            "type": "string"
+        },
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "stepId": {
+            "required": true,
+            "type": "string"
+        },
+        "prettyPrint": {
+            "type": "boolean",
+            "default": true
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "Resource representing a collection of performance samples (or data points)",
+            "properties": {
+                "basicPerfSampleSeries": {
+                    "description": "Basic series represented by a line chart",
+                    "properties": {
+                        "perfMetricType": {
+                            "enum": [
+                                "cpu",
+                                "graphics",
+                                "memory",
+                                "network",
+                                "perfMetricTypeUnspecified"
+                            ],
+                            "type": "string"
+                        },
+                        "perfUnit": {
+                            "enum": [
+                                "byte",
+                                "bytesPerSecond",
+                                "framesPerSecond",
+                                "kibibyte",
+                                "percent",
+                                "perfUnitUnspecified"
+                            ],
+                            "type": "string"
+                        },
+                        "sampleSeriesLabel": {
+                            "enum": [
+                                "cpuKernel",
+                                "cpuTotal",
+                                "cpuUser",
+                                "graphicsFrameRate",
+                                "memoryRssPrivate",
+                                "memoryRssShared",
+                                "memoryRssTotal",
+                                "memoryTotal",
+                                "networkReceived",
+                                "networkSent",
+                                "ntBytesReceived",
+                                "ntBytesTransferred",
+                                "sampleSeriesTypeUnspecified"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "executionId": {
+                    "description": "A tool results execution ID.",
+                    "type": "string"
+                },
+                "historyId": {
+                    "description": "A tool results history ID.",
+                    "type": "string"
+                },
+                "projectId": {
+                    "description": "The cloud project",
+                    "type": "string"
+                },
+                "sampleSeriesId": {
+                    "description": "A sample series id",
+                    "type": "string"
+                },
+                "stepId": {
+                    "description": "A tool results step ID.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

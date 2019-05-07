@@ -1,0 +1,649 @@
+{
+    "type": "object",
+    "properties": {
+        "executionId": {
+            "required": true,
+            "type": "string"
+        },
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestId": {
+            "type": "string"
+        },
+        "stepId": {
+            "required": true,
+            "type": "string"
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "A Step represents a single operation performed as part of Execution. A step can be used to represent the execution of a tool ( for example a test runner execution or an execution of a compiler).\n\nSteps can overlap (for instance two steps might have the same start time if some operations are done in parallel).\n\nHere is an example, let's consider that we have a continuous build is executing a test runner for each iteration. The workflow would look like: - user creates a Execution with id 1 - user creates an TestExecutionStep with id 100 for Execution 1 - user update TestExecutionStep with id 100 to add a raw xml log + the service parses the xml logs and returns a TestExecutionStep with updated TestResult(s). - user update the status of TestExecutionStep with id 100 to COMPLETE\n\nA Step can be updated until its state is set to COMPLETE at which points it becomes immutable.",
+            "properties": {
+                "completionTime": {
+                    "description": "The time when the step status was set to complete.\n\nThis value will be set automatically when state transitions to COMPLETE.\n\n- In response: set if the execution state is COMPLETE. - In create/update request: never set",
+                    "properties": {
+                        "nanos": {
+                            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "creationTime": {
+                    "description": "The time when the step was created.\n\n- In response: always set - In create/update request: never set",
+                    "properties": {
+                        "nanos": {
+                            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "description": {
+                    "description": "A description of this tool For example: mvn clean package -D skipTests=true\n\n- In response: present if set by create/update request - In create/update request: optional",
+                    "type": "string"
+                },
+                "deviceUsageDuration": {
+                    "description": "How much the device resource is used to perform the test.\n\nThis is the device usage used for billing purpose, which is different from the run_duration, for example, infrastructure failure won't be charged for device usage.\n\nPRECONDITION_FAILED will be returned if one attempts to set a device_usage on a step which already has this field set.\n\n- In response: present if previously set. - In create request: optional - In update request: optional",
+                    "properties": {
+                        "nanos": {
+                            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "dimensionValue": {
+                    "description": "If the execution containing this step has any dimension_definition set, then this field allows the child to specify the values of the dimensions.\n\nThe keys must exactly match the dimension_definition of the execution.\n\nFor example, if the execution has `dimension_definition = ['attempt', 'device']` then a step must define values for those dimensions, eg. `dimension_value = ['attempt': '1', 'device': 'Nexus 6']`\n\nIf a step does not participate in one dimension of the matrix, the value for that dimension should be empty string. For example, if one of the tests is executed by a runner which does not support retries, the step could have `dimension_value = ['attempt': '', 'device': 'Nexus 6']`\n\nIf the step does not participate in any dimensions of the matrix, it may leave dimension_value unset.\n\nA PRECONDITION_FAILED will be returned if any of the keys do not exist in the dimension_definition of the execution.\n\nA PRECONDITION_FAILED will be returned if another step in this execution already has the same name and dimension_value, but differs on other data fields, for example, step field is different.\n\nA PRECONDITION_FAILED will be returned if dimension_value is set, and there is a dimension_definition in the execution which is not specified as one of the keys.\n\n- In response: present if set by create - In create request: optional - In update request: never set",
+                    "items": {
+                        "properties": {
+                            "key": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "hasImages": {
+                    "description": "Whether any of the outputs of this step are images whose thumbnails can be fetched with ListThumbnails.\n\n- In response: always set - In create/update request: never set",
+                    "type": "boolean"
+                },
+                "labels": {
+                    "description": "Arbitrary user-supplied key/value pairs that are associated with the step.\n\nUsers are responsible for managing the key namespace such that keys don't accidentally collide.\n\nAn INVALID_ARGUMENT will be returned if the number of labels exceeds 100 or if the length of any of the keys or values exceeds 100 characters.\n\n- In response: always set - In create request: optional - In update request: optional; any new key/value pair will be added to the map, and any new value for an existing key will update that key's value",
+                    "items": {
+                        "properties": {
+                            "key": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "multiStep": {
+                    "description": "Details when multiple steps are run with the same configuration as a group. These details can be used identify which group this step is part of. It also identifies the groups 'primary step' which indexes all the group members.\n\n- In response: present if previously set. - In create request: optional, set iff this step was performed more than once. - In update request: optional",
+                    "properties": {
+                        "multistepNumber": {
+                            "description": "Unique int given to each step. Ranges from 0(inclusive) to total number of steps(exclusive). The primary step is 0.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "primaryStep": {
+                            "description": "Present if it is a primary (original) step.",
+                            "properties": {
+                                "individualOutcome": {
+                                    "description": "Step Id and outcome of each individual step.",
+                                    "items": {
+                                        "description": "Step Id and outcome of each individual step that was run as a group with other steps with the same configuration.",
+                                        "properties": {
+                                            "outcomeSummary": {
+                                                "enum": [
+                                                    "failure",
+                                                    "flaky",
+                                                    "inconclusive",
+                                                    "skipped",
+                                                    "success",
+                                                    "unset"
+                                                ],
+                                                "type": "string"
+                                            },
+                                            "stepId": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "rollUp": {
+                                    "description": "Rollup test status of multiple steps that were run with the same configuration as a group.",
+                                    "enum": [
+                                        "failure",
+                                        "flaky",
+                                        "inconclusive",
+                                        "skipped",
+                                        "success",
+                                        "unset"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "primaryStepId": {
+                            "description": "Step Id of the primary (original) step, which might be this step.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "name": {
+                    "description": "A short human-readable name to display in the UI. Maximum of 100 characters. For example: Clean build\n\nA PRECONDITION_FAILED will be returned upon creating a new step if it shares its name and dimension_value with an existing step. If two steps represent a similar action, but have different dimension values, they should share the same name. For instance, if the same set of tests is run on two different platforms, the two steps should have the same name.\n\n- In response: always set - In create request: always set - In update request: never set",
+                    "type": "string"
+                },
+                "outcome": {
+                    "description": "Classification of the result, for example into SUCCESS or FAILURE\n\n- In response: present if set by create/update request - In create/update request: optional",
+                    "properties": {
+                        "failureDetail": {
+                            "description": "More information about a FAILURE outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not FAILURE.\n\nOptional",
+                            "properties": {
+                                "crashed": {
+                                    "description": "If the failure was severe because the system (app) under test crashed.",
+                                    "type": "boolean"
+                                },
+                                "notInstalled": {
+                                    "description": "If an app is not installed and thus no test can be run with the app. This might be caused by trying to run a test on an unsupported platform.",
+                                    "type": "boolean"
+                                },
+                                "otherNativeCrash": {
+                                    "description": "If a native process (including any other than the app) crashed.",
+                                    "type": "boolean"
+                                },
+                                "timedOut": {
+                                    "description": "If the test overran some time limit, and that is why it failed.",
+                                    "type": "boolean"
+                                },
+                                "unableToCrawl": {
+                                    "description": "If the robo was unable to crawl the app; perhaps because the app did not start.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "inconclusiveDetail": {
+                            "description": "More information about an INCONCLUSIVE outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not INCONCLUSIVE.\n\nOptional",
+                            "properties": {
+                                "abortedByUser": {
+                                    "description": "If the end user aborted the test execution before a pass or fail could be determined. For example, the user pressed ctrl-c which sent a kill signal to the test runner while the test was running.",
+                                    "type": "boolean"
+                                },
+                                "infrastructureFailure": {
+                                    "description": "If the test runner could not determine success or failure because the test depends on a component other than the system under test which failed.\n\nFor example, a mobile test requires provisioning a device where the test executes, and that provisioning can fail.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "skippedDetail": {
+                            "description": "More information about a SKIPPED outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not SKIPPED.\n\nOptional",
+                            "properties": {
+                                "incompatibleAppVersion": {
+                                    "description": "If the App doesn't support the specific API level.",
+                                    "type": "boolean"
+                                },
+                                "incompatibleArchitecture": {
+                                    "description": "If the App doesn't run on the specific architecture, for example, x86.",
+                                    "type": "boolean"
+                                },
+                                "incompatibleDevice": {
+                                    "description": "If the requested OS version doesn't run on the specific device model.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "successDetail": {
+                            "description": "More information about a SUCCESS outcome.\n\nReturns INVALID_ARGUMENT if this field is set but the summary is not SUCCESS.\n\nOptional",
+                            "properties": {
+                                "otherNativeCrash": {
+                                    "description": "If a native process other than the app crashed.",
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "summary": {
+                            "description": "The simplest way to interpret a result.\n\nRequired",
+                            "enum": [
+                                "failure",
+                                "flaky",
+                                "inconclusive",
+                                "skipped",
+                                "success",
+                                "unset"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "runDuration": {
+                    "description": "How long it took for this step to run.\n\nIf unset, this is set to the difference between creation_time and completion_time when the step is set to the COMPLETE state. In some cases, it is appropriate to set this value separately: For instance, if a step is created, but the operation it represents is queued for a few minutes before it executes, it would be appropriate not to include the time spent queued in its run_duration.\n\nPRECONDITION_FAILED will be returned if one attempts to set a run_duration on a step which already has this field set.\n\n- In response: present if previously set; always present on COMPLETE step - In create request: optional - In update request: optional",
+                    "properties": {
+                        "nanos": {
+                            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "seconds": {
+                            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "state": {
+                    "description": "The initial state is IN_PROGRESS. The only legal state transitions are * IN_PROGRESS -> COMPLETE\n\nA PRECONDITION_FAILED will be returned if an invalid transition is requested.\n\nIt is valid to create Step with a state set to COMPLETE. The state can only be set to COMPLETE once. A PRECONDITION_FAILED will be returned if the state is set to COMPLETE multiple times.\n\n- In response: always set - In create/update request: optional",
+                    "enum": [
+                        "complete",
+                        "inProgress",
+                        "pending",
+                        "unknownState"
+                    ],
+                    "type": "string"
+                },
+                "stepId": {
+                    "description": "A unique identifier within a Execution for this Step.\n\nReturns INVALID_ARGUMENT if this field is set or overwritten by the caller.\n\n- In response: always set - In create/update request: never set",
+                    "type": "string"
+                },
+                "testExecutionStep": {
+                    "description": "An execution of a test runner.",
+                    "properties": {
+                        "testIssues": {
+                            "description": "Issues observed during the test execution.\n\nFor example, if the mobile app under test crashed during the test, the error message and the stack trace content can be recorded here to assist debugging.\n\n- In response: present if set by create or update - In create/update request: optional",
+                            "items": {
+                                "description": "An issue detected occurring during a test execution.",
+                                "properties": {
+                                    "category": {
+                                        "description": "Category of issue. Required.",
+                                        "enum": [
+                                            "common",
+                                            "robo",
+                                            "unspecifiedCategory"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "errorMessage": {
+                                        "description": "A brief human-readable message describing the issue. Required.",
+                                        "type": "string"
+                                    },
+                                    "severity": {
+                                        "description": "Severity of issue. Required.",
+                                        "enum": [
+                                            "info",
+                                            "severe",
+                                            "suggestion",
+                                            "unspecifiedSeverity",
+                                            "warning"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "stackTrace": {
+                                        "description": "Deprecated in favor of stack trace fields inside specific warnings.",
+                                        "properties": {
+                                            "exception": {
+                                                "description": "The stack trace message.\n\nRequired",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": {
+                                        "description": "Type of issue. Required.",
+                                        "enum": [
+                                            "anr",
+                                            "availableDeepLinks",
+                                            "compatibleWithOrchestrator",
+                                            "completeRoboScriptExecution",
+                                            "encounteredLoginScreen",
+                                            "encounteredNonAndroidUiWidgetScreen",
+                                            "failedToInstall",
+                                            "fatalException",
+                                            "inAppPurchases",
+                                            "incompleteRoboScriptExecution",
+                                            "insufficientCoverage",
+                                            "iosCrash",
+                                            "iosException",
+                                            "launcherActivityNotFound",
+                                            "nativeCrash",
+                                            "nonSdkApiUsageViolation",
+                                            "performedGoogleLogin",
+                                            "performedMonkeyActions",
+                                            "startActivityNotFound",
+                                            "unspecifiedType",
+                                            "unusedRoboDirective",
+                                            "usedRoboDirective",
+                                            "usedRoboIgnoreDirective"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "warning": {
+                                        "description": "Warning message with additional details of the issue. Should always be a message from com.google.devtools.toolresults.v1.warnings",
+                                        "properties": {
+                                            "typeUrl": {
+                                                "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they expect it to use in the context of Any. However, for URLs which use the scheme `http`, `https`, or no scheme, one can optionally set up a type server that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed. * An HTTP GET on the URL must yield a [google.protobuf.Type][] value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the URL, or have them precompiled into a binary to avoid any lookup. Therefore, binary compatibility needs to be preserved on changes to types. (Use versioned type names to manage breaking changes.)\n\nNote: this functionality is not currently available in the official protobuf release, and it is not used for type URLs beginning with type.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                                                "format": "byte",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "testSuiteOverviews": {
+                            "description": "List of test suite overview contents. This could be parsed from xUnit XML log by server, or uploaded directly by user. This references should only be called when test suites are fully parsed or uploaded.\n\nThe maximum allowed number of test suite overviews per step is 1000.\n\n- In response: always set - In create request: optional - In update request: never (use publishXunitXmlFiles custom method instead)",
+                            "items": {
+                                "description": "A summary of a test suite result either parsed from XML or uploaded directly by a user.\n\nNote: the API related comments are for StepService only. This message is also being used in ExecutionService in a read only mode for the corresponding step.",
+                                "properties": {
+                                    "errorCount": {
+                                        "description": "Number of test cases in error, typically set by the service by parsing the xml_source.\n\n- In create/response: always set - In update request: never",
+                                        "format": "int32",
+                                        "type": "integer"
+                                    },
+                                    "failureCount": {
+                                        "description": "Number of failed test cases, typically set by the service by parsing the xml_source. May also be set by the user.\n\n- In create/response: always set - In update request: never",
+                                        "format": "int32",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "The name of the test suite.\n\n- In create/response: always set - In update request: never",
+                                        "type": "string"
+                                    },
+                                    "skippedCount": {
+                                        "description": "Number of test cases not run, typically set by the service by parsing the xml_source.\n\n- In create/response: always set - In update request: never",
+                                        "format": "int32",
+                                        "type": "integer"
+                                    },
+                                    "totalCount": {
+                                        "description": "Number of test cases, typically set by the service by parsing the xml_source.\n\n- In create/response: always set - In update request: never",
+                                        "format": "int32",
+                                        "type": "integer"
+                                    },
+                                    "xmlSource": {
+                                        "description": "If this test suite was parsed from XML, this is the URI where the original XML file is stored.\n\nNote: Multiple test suites can share the same xml_source\n\nReturns INVALID_ARGUMENT if the uri format is not supported.\n\n- In create/response: optional - In update request: never",
+                                        "properties": {
+                                            "fileUri": {
+                                                "description": "The URI of a file stored in Google Cloud Storage.\n\nFor example: http://storage.googleapis.com/mybucket/path/to/test.xml or in gsutil format: gs://mybucket/path/to/test.xml with version-specific info, gs://mybucket/path/to/test.xml#1360383693690000\n\nAn INVALID_ARGUMENT error will be returned if the URI format is not supported.\n\n- In response: always set - In create/update request: always set",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "testTiming": {
+                            "description": "The timing break down of the test execution.\n\n- In response: present if set by create or update - In create/update request: optional",
+                            "properties": {
+                                "testProcessDuration": {
+                                    "description": "How long it took to run the test process.\n\n- In response: present if previously set. - In create/update request: optional",
+                                    "properties": {
+                                        "nanos": {
+                                            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        },
+                                        "seconds": {
+                                            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                                            "format": "int64",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "toolExecution": {
+                            "description": "Represents the execution of the test runner.\n\nThe exit code of this tool will be used to determine if the test passed.\n\n- In response: always set - In create/update request: optional",
+                            "properties": {
+                                "commandLineArguments": {
+                                    "description": "The full tokenized command line including the program name (equivalent to argv in a C program).\n\n- In response: present if set by create request - In create request: optional - In update request: never set",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "exitCode": {
+                                    "description": "Tool execution exit code. This field will be set once the tool has exited.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, a FAILED_PRECONDITION error will be returned if an exit_code is already set.",
+                                    "properties": {
+                                        "number": {
+                                            "description": "Tool execution exit code. A value of 0 means that the execution was successful.\n\n- In response: always set - In create/update request: always set",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "toolLogs": {
+                                    "description": "References to any plain text logs output the tool execution.\n\nThis field can be set before the tool has exited in order to be able to have access to a live view of the logs while the tool is running.\n\nThe maximum allowed number of tool logs per step is 1000.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, any value provided will be appended to the existing list",
+                                    "items": {
+                                        "description": "A reference to a file.",
+                                        "properties": {
+                                            "fileUri": {
+                                                "description": "The URI of a file stored in Google Cloud Storage.\n\nFor example: http://storage.googleapis.com/mybucket/path/to/test.xml or in gsutil format: gs://mybucket/path/to/test.xml with version-specific info, gs://mybucket/path/to/test.xml#1360383693690000\n\nAn INVALID_ARGUMENT error will be returned if the URI format is not supported.\n\n- In response: always set - In create/update request: always set",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "toolOutputs": {
+                                    "description": "References to opaque files of any format output by the tool execution.\n\nThe maximum allowed number of tool outputs per step is 1000.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, any value provided will be appended to the existing list",
+                                    "items": {
+                                        "description": "A reference to a ToolExecution output file.",
+                                        "properties": {
+                                            "creationTime": {
+                                                "description": "The creation time of the file.\n\n- In response: present if set by create/update request - In create/update request: optional",
+                                                "properties": {
+                                                    "nanos": {
+                                                        "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                                                        "format": "int32",
+                                                        "type": "integer"
+                                                    },
+                                                    "seconds": {
+                                                        "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                                                        "format": "int64",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "output": {
+                                                "description": "A FileReference to an output file.\n\n- In response: always set - In create/update request: always set",
+                                                "properties": {
+                                                    "fileUri": {
+                                                        "description": "The URI of a file stored in Google Cloud Storage.\n\nFor example: http://storage.googleapis.com/mybucket/path/to/test.xml or in gsutil format: gs://mybucket/path/to/test.xml with version-specific info, gs://mybucket/path/to/test.xml#1360383693690000\n\nAn INVALID_ARGUMENT error will be returned if the URI format is not supported.\n\n- In response: always set - In create/update request: always set",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "testCase": {
+                                                "description": "The test case to which this output file belongs.\n\n- In response: present if set by create/update request - In create/update request: optional",
+                                                "properties": {
+                                                    "className": {
+                                                        "description": "The name of the class.",
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "description": "The name of the test case.\n\nRequired.",
+                                                        "type": "string"
+                                                    },
+                                                    "testSuiteName": {
+                                                        "description": "The name of the test suite to which this test case belongs.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "toolExecutionStep": {
+                    "description": "An execution of a tool (used for steps we don't explicitly support).",
+                    "properties": {
+                        "toolExecution": {
+                            "description": "A Tool execution.\n\n- In response: present if set by create/update request - In create/update request: optional",
+                            "properties": {
+                                "commandLineArguments": {
+                                    "description": "The full tokenized command line including the program name (equivalent to argv in a C program).\n\n- In response: present if set by create request - In create request: optional - In update request: never set",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "exitCode": {
+                                    "description": "Tool execution exit code. This field will be set once the tool has exited.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, a FAILED_PRECONDITION error will be returned if an exit_code is already set.",
+                                    "properties": {
+                                        "number": {
+                                            "description": "Tool execution exit code. A value of 0 means that the execution was successful.\n\n- In response: always set - In create/update request: always set",
+                                            "format": "int32",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "toolLogs": {
+                                    "description": "References to any plain text logs output the tool execution.\n\nThis field can be set before the tool has exited in order to be able to have access to a live view of the logs while the tool is running.\n\nThe maximum allowed number of tool logs per step is 1000.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, any value provided will be appended to the existing list",
+                                    "items": {
+                                        "description": "A reference to a file.",
+                                        "properties": {
+                                            "fileUri": {
+                                                "description": "The URI of a file stored in Google Cloud Storage.\n\nFor example: http://storage.googleapis.com/mybucket/path/to/test.xml or in gsutil format: gs://mybucket/path/to/test.xml with version-specific info, gs://mybucket/path/to/test.xml#1360383693690000\n\nAn INVALID_ARGUMENT error will be returned if the URI format is not supported.\n\n- In response: always set - In create/update request: always set",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                },
+                                "toolOutputs": {
+                                    "description": "References to opaque files of any format output by the tool execution.\n\nThe maximum allowed number of tool outputs per step is 1000.\n\n- In response: present if set by create/update request - In create request: optional - In update request: optional, any value provided will be appended to the existing list",
+                                    "items": {
+                                        "description": "A reference to a ToolExecution output file.",
+                                        "properties": {
+                                            "creationTime": {
+                                                "description": "The creation time of the file.\n\n- In response: present if set by create/update request - In create/update request: optional",
+                                                "properties": {
+                                                    "nanos": {
+                                                        "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                                                        "format": "int32",
+                                                        "type": "integer"
+                                                    },
+                                                    "seconds": {
+                                                        "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                                                        "format": "int64",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "output": {
+                                                "description": "A FileReference to an output file.\n\n- In response: always set - In create/update request: always set",
+                                                "properties": {
+                                                    "fileUri": {
+                                                        "description": "The URI of a file stored in Google Cloud Storage.\n\nFor example: http://storage.googleapis.com/mybucket/path/to/test.xml or in gsutil format: gs://mybucket/path/to/test.xml with version-specific info, gs://mybucket/path/to/test.xml#1360383693690000\n\nAn INVALID_ARGUMENT error will be returned if the URI format is not supported.\n\n- In response: always set - In create/update request: always set",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "testCase": {
+                                                "description": "The test case to which this output file belongs.\n\n- In response: present if set by create/update request - In create/update request: optional",
+                                                "properties": {
+                                                    "className": {
+                                                        "description": "The name of the class.",
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "description": "The name of the test case.\n\nRequired.",
+                                                        "type": "string"
+                                                    },
+                                                    "testSuiteName": {
+                                                        "description": "The name of the test suite to which this test case belongs.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

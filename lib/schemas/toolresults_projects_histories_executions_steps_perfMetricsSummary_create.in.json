@@ -1,0 +1,226 @@
+{
+    "type": "object",
+    "properties": {
+        "executionId": {
+            "required": true,
+            "type": "string"
+        },
+        "historyId": {
+            "required": true,
+            "type": "string"
+        },
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "stepId": {
+            "required": true,
+            "type": "string"
+        },
+        "prettyPrint": {
+            "type": "boolean",
+            "default": true
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "A summary of perf metrics collected and performance environment info",
+            "properties": {
+                "appStartTime": {
+                    "properties": {
+                        "fullyDrawnTime": {
+                            "description": "Optional. The time from app start to reaching the developer-reported \"fully drawn\" time. This is only stored if the app includes a call to Activity.reportFullyDrawn(). See https://developer.android.com/topic/performance/launch-time.html#time-full",
+                            "properties": {
+                                "nanos": {
+                                    "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                                    "format": "int32",
+                                    "type": "integer"
+                                },
+                                "seconds": {
+                                    "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                                    "format": "int64",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "initialDisplayTime": {
+                            "description": "The time from app start to the first displayed activity being drawn, as reported in Logcat. See https://developer.android.com/topic/performance/launch-time.html#time-initial",
+                            "properties": {
+                                "nanos": {
+                                    "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                                    "format": "int32",
+                                    "type": "integer"
+                                },
+                                "seconds": {
+                                    "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                                    "format": "int64",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "executionId": {
+                    "description": "A tool results execution ID.",
+                    "type": "string"
+                },
+                "graphicsStats": {
+                    "description": "Graphics statistics for the entire run. Statistics are reset at the beginning of the run and collected at the end of the run.",
+                    "properties": {
+                        "buckets": {
+                            "description": "Histogram of frame render times. There should be 154 buckets ranging from [5ms, 6ms) to [4950ms, infinity)",
+                            "items": {
+                                "properties": {
+                                    "frameCount": {
+                                        "description": "Number of frames in the bucket.",
+                                        "format": "int64",
+                                        "type": "string"
+                                    },
+                                    "renderMillis": {
+                                        "description": "Lower bound of render time in milliseconds.",
+                                        "format": "int64",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "highInputLatencyCount": {
+                            "description": "Total \"high input latency\" events.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "jankyFrames": {
+                            "description": "Total frames with slow render time. Should be <= total_frames.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "missedVsyncCount": {
+                            "description": "Total \"missed vsync\" events.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "p50Millis": {
+                            "description": "50th percentile frame render time in milliseconds.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "p90Millis": {
+                            "description": "90th percentile frame render time in milliseconds.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "p95Millis": {
+                            "description": "95th percentile frame render time in milliseconds.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "p99Millis": {
+                            "description": "99th percentile frame render time in milliseconds.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "slowBitmapUploadCount": {
+                            "description": "Total \"slow bitmap upload\" events.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "slowDrawCount": {
+                            "description": "Total \"slow draw\" events.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "slowUiThreadCount": {
+                            "description": "Total \"slow UI thread\" events.",
+                            "format": "int64",
+                            "type": "string"
+                        },
+                        "totalFrames": {
+                            "description": "Total frames rendered by package.",
+                            "format": "int64",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "historyId": {
+                    "description": "A tool results history ID.",
+                    "type": "string"
+                },
+                "perfEnvironment": {
+                    "description": "Describes the environment in which the performance metrics were collected",
+                    "properties": {
+                        "cpuInfo": {
+                            "description": "CPU related environment info",
+                            "properties": {
+                                "cpuProcessor": {
+                                    "description": "description of the device processor ie '1.8 GHz hexa core 64-bit ARMv8-A'",
+                                    "type": "string"
+                                },
+                                "cpuSpeedInGhz": {
+                                    "description": "the CPU clock speed in GHz",
+                                    "format": "float",
+                                    "type": "number"
+                                },
+                                "numberOfCores": {
+                                    "description": "the number of CPU cores",
+                                    "format": "int32",
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "memoryInfo": {
+                            "description": "Memory related environment info",
+                            "properties": {
+                                "memoryCapInKibibyte": {
+                                    "description": "Maximum memory that can be allocated to the process in KiB",
+                                    "format": "int64",
+                                    "type": "string"
+                                },
+                                "memoryTotalInKibibyte": {
+                                    "description": "Total memory available on the device in KiB",
+                                    "format": "int64",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "perfMetrics": {
+                    "description": "Set of resource collected",
+                    "items": {
+                        "enum": [
+                            "cpu",
+                            "graphics",
+                            "memory",
+                            "network",
+                            "perfMetricTypeUnspecified"
+                        ],
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "projectId": {
+                    "description": "The cloud project",
+                    "type": "string"
+                },
+                "stepId": {
+                    "description": "A tool results step ID.",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

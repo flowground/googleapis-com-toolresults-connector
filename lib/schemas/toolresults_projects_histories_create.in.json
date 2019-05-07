@@ -1,0 +1,46 @@
+{
+    "type": "object",
+    "properties": {
+        "projectId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestId": {
+            "type": "string"
+        },
+        "key": {
+            "type": "string"
+        },
+        "oauth_token": {
+            "type": "string"
+        },
+        "prettyPrint": {
+            "type": "boolean",
+            "default": true
+        },
+        "quotaUser": {
+            "type": "string"
+        },
+        "userIp": {
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "A History represents a sorted list of Executions ordered by the start_timestamp_millis field (descending). It can be used to group all the Executions of a continuous build.\n\nNote that the ordering only operates on one-dimension. If a repository has multiple branches, it means that multiple histories will need to be used in order to order Executions per branch.",
+            "properties": {
+                "displayName": {
+                    "description": "A short human-readable (plain text) name to display in the UI. Maximum of 100 characters.\n\n- In response: present if set during create. - In create request: optional",
+                    "type": "string"
+                },
+                "historyId": {
+                    "description": "A unique identifier within a project for this History.\n\nReturns INVALID_ARGUMENT if this field is set or overwritten by the caller.\n\n- In response always set - In create request: never set",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "A name to uniquely identify a history within a project. Maximum of 200 characters.\n\n- In response always set - In create request: always set",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}
